@@ -55,14 +55,24 @@ export default function About() {
   // Double the items for seamless loop
   const doubledMarqueeItems = [...marqueeItems, ...marqueeItems];
 
-  const downloadCV = () => {
-    const cvUrl = "/cv/sadaf-ameer-cv.pdf";
+const downloadCV = async () => {
+  try {
+    const response = await fetch('/_Sadaf_Ameer_CV  (5) (1).pdf');
+    if (!response.ok) throw new Error('CV not found');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = cvUrl;
-    link.download = "/Sadaf_Ameer_CV (1).docx";
+    link.href = url;
+    link.download = "Sadaf_Ameer_CV.pdf";
+    document.body.appendChild(link);
     link.click();
-  };
-
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error:', error);
+    alert('CV file not found. Please contact administrator.');
+  }
+};
   return (
     <section id="about" className="bg-[#061825] py-24 px-6 text-white relative overflow-hidden">
       {/* Simple Background - No Animations */}
